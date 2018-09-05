@@ -11,7 +11,7 @@ ethcore-io = { path = "../../util/io" }
 ethcore-private-tx = { path = "../private-tx" }
 ethcore-sync = { path = "../sync" }
 ethereum-types = "0.4"
-kvdb = { git = "https://github.com/paritytech/parity-common", rev = "181546066794686f84ab51b27d3116358df740a0" }
+kvdb = { git = "https://github.com/paritytech/parity-common", rev = "cf0829f0b475933a74bce59caf803d907f8db09a" }
 log = "0.4"
 stop-guard = { path = "../../util/stop-guard" }
 trace-time = "0.1"
@@ -19,4 +19,4 @@ trace-time = "0.1"
 [dev-dependencies]
 ethcore = { path = "..", features = ["test-helpers"] }
 tempdir = "0.3"
-kvdb-rocksdb = { git = "https://github.com/paritytech/parity-common", rev = "181546066794686f84ab51b27d3116358df740a0" }
+kvdb-rocksdb = { git = "https://github.com/paritytech/parity-common", rev = "cf0829f0b475933a74bce59caf803d907f8db09a" }
