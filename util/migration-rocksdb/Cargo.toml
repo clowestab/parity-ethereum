@@ -6,8 +6,8 @@ authors = ["Parity Technologies <admin@parity.io>"]
 [dependencies]
 log = "0.4"
 macros = { path = "../macros" }
-kvdb = { git = "https://github.com/paritytech/parity-common", rev = "ebf6ace293562fc2d866bf115ba2c517e392ada1" }
-kvdb-rocksdb = { git = "https://github.com/paritytech/parity-common", rev = "ebf6ace293562fc2d866bf115ba2c517e392ada1" }
+kvdb = { git = "https://github.com/paritytech/parity-common", rev = "0d023fd98e4a4cc7991eb38d15f8efa6ea9b32f5" }
+kvdb-rocksdb = { git = "https://github.com/paritytech/parity-common", rev = "0d023fd98e4a4cc7991eb38d15f8efa6ea9b32f5" }
 
 [dev-dependencies]
 tempdir = "0.3"
