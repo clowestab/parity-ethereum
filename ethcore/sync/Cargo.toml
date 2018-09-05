@@ -24,7 +24,7 @@ rustc-hex = "1.0"
 keccak-hash = "0.1"
 keccak-hasher = { path = "../../util/keccak-hasher" }
 triehash-ethereum = {version = "0.2", path = "../../util/triehash-ethereum" }
-kvdb = { git = "https://github.com/paritytech/parity-common", rev = "cf0829f0b475933a74bce59caf803d907f8db09a" }
+kvdb = { git = "https://github.com/paritytech/parity-common", rev = "ebf6ace293562fc2d866bf115ba2c517e392ada1" }
 macros = { path = "../../util/macros" }
 log = "0.4"
 env_logger = "0.5"
@@ -39,6 +39,6 @@ ipnetwork = "0.12.6"
 [dev-dependencies]
 ethcore-io = { path = "../../util/io", features = ["mio"] }
 ethkey = { path = "../../ethkey" }
-kvdb-memorydb = { git = "https://github.com/paritytech/parity-common", rev = "cf0829f0b475933a74bce59caf803d907f8db09a" }
+kvdb-memorydb = { git = "https://github.com/paritytech/parity-common", rev = "ebf6ace293562fc2d866bf115ba2c517e392ada1" }
 ethcore-private-tx = { path = "../private-tx" }
 ethcore = { path = "..", features = ["test-helpers"] }
