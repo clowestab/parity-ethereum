@@ -33,7 +33,7 @@ fdlimit = "0.1"
 ctrlc = { git = "https://github.com/paritytech/rust-ctrlc.git" }
 jsonrpc-core = { git = "https://github.com/paritytech/jsonrpc.git", branch = "parity-1.11" }
 ethcore = { path = "ethcore", features = ["parity"] }
-parity-bytes = { git = "https://github.com/paritytech/parity-common", rev = "9e6725385b89b38f74c1a8ffc82abdd7fa25c304" }
+parity-bytes = { git = "https://github.com/paritytech/parity-common", branch = "ng-test-db-restore" }
 ethcore-io = { path = "util/io" }
 ethcore-light = { path = "ethcore/light" }
 ethcore-logger = { path = "logger" }
@@ -46,7 +46,7 @@ ethcore-transaction = { path = "ethcore/transaction" }
 ethereum-types = "0.3"
 node-filter = { path = "ethcore/node_filter" }
 ethkey = { path = "ethkey" }
-rlp = { git = "https://github.com/paritytech/parity-common", rev = "9e6725385b89b38f74c1a8ffc82abdd7fa25c304" }
+rlp = { git = "https://github.com/paritytech/parity-common", branch = "ng-test-db-restore" }
 rpc-cli = { path = "rpc_cli" }
 parity-hash-fetch = { path = "hash-fetch" }
 parity-ipfs-api = { path = "ipfs" }
@@ -57,10 +57,10 @@ parity-rpc-client = { path = "rpc_client" }
 parity-updater = { path = "updater" }
 parity-version = { path = "util/version" }
 parity-whisper = { path = "whisper" }
-path = { git = "https://github.com/paritytech/parity-common", rev = "9e6725385b89b38f74c1a8ffc82abdd7fa25c304" }
+path = { git = "https://github.com/paritytech/parity-common", branch = "ng-test-db-restore" }
 dir = { path = "util/dir" }
 panic_hook = { path = "util/panic_hook" }
-keccak-hash = { git = "https://github.com/paritytech/parity-common", rev = "9e6725385b89b38f74c1a8ffc82abdd7fa25c304" }
+keccak-hash = { git = "https://github.com/paritytech/parity-common", branch = "ng-test-db-restore" }
 migration-rocksdb = { path = "util/migration-rocksdb" }
 kvdb = "0.1.0"
 kvdb-rocksdb = "0.1.3"

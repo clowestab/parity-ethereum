@@ -10,7 +10,7 @@ ethcore-io = { path = "../util/io" }
 ethcore-transaction = { path = "../ethcore/transaction" }
 kvdb = "0.1.0"
 log = "0.4"
-rlp = { git = "https://github.com/paritytech/parity-common", rev = "9e6725385b89b38f74c1a8ffc82abdd7fa25c304" }
+rlp = { git = "https://github.com/paritytech/parity-common", branch = "ng-test-db-restore" }
 serde = "1.0"
 serde_derive = "1.0"
 serde_json = "1.0"
