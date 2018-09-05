@@ -62,8 +62,8 @@ dir = { path = "util/dir" }
 panic_hook = { path = "util/panic_hook" }
 keccak-hash = "0.1"
 migration-rocksdb = { path = "util/migration-rocksdb" }
-kvdb = { git = "https://github.com/paritytech/parity-common", rev = "a0380e8d090c25ff78cd0d5ffe70af7e8e10c127" }
-kvdb-rocksdb = { git = "https://github.com/paritytech/parity-common", rev = "a0380e8d090c25ff78cd0d5ffe70af7e8e10c127" }
+kvdb = { git = "https://github.com/paritytech/parity-common", rev = "181546066794686f84ab51b27d3116358df740a0" }
+kvdb-rocksdb = { git = "https://github.com/paritytech/parity-common", rev = "181546066794686f84ab51b27d3116358df740a0" }
 journaldb = { path = "util/journaldb" }
 mem = { path = "util/mem" }
 

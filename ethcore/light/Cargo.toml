@@ -35,13 +35,13 @@ stats = { path = "../../util/stats" }
 keccak-hash = "0.1"
 keccak-hasher = { path = "../../util/keccak-hasher" }
 triehash-ethereum = { version = "0.2",  path = "../../util/triehash-ethereum" }
-kvdb = { git = "https://github.com/paritytech/parity-common", rev = "a0380e8d090c25ff78cd0d5ffe70af7e8e10c127" }
+kvdb = { git = "https://github.com/paritytech/parity-common", rev = "181546066794686f84ab51b27d3116358df740a0" }
 memory-cache = { path = "../../util/memory_cache" }
 error-chain = { version = "0.12", default-features = false }
 
 [dev-dependencies]
 ethcore = { path = "..", features = ["test-helpers"] }
-kvdb-memorydb = { git = "https://github.com/paritytech/parity-common", rev = "a0380e8d090c25ff78cd0d5ffe70af7e8e10c127" }
+kvdb-memorydb = { git = "https://github.com/paritytech/parity-common", rev = "181546066794686f84ab51b27d3116358df740a0" }
 tempdir = "0.3"
 
 [features]
