@@ -1287,10 +1287,8 @@ impl snapshot::DatabaseRestore for Client {
 		let mut chain = self.chain.write();
 		let mut tracedb = self.tracedb.write();
 		self.importer.miner.clear();
-		let db = self.db.write();
-		db.key_value().restore(new_db)?;
-		db.blooms().reopen()?;
-		db.trace_blooms().reopen()?;
+		let mut db = self.db.write();
+		Arc::get_mut(&mut *db).unwrap().restore(new_db)?;
 
 		let cache_size = state_db.cache_size();
 		*state_db = StateDB::new(journaldb::new(db.key_value().clone(), self.pruning, ::db::COL_STATE), cache_size);

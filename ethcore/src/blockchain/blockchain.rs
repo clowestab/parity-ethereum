@@ -34,6 +34,7 @@ use db::{self, Writable, Readable, CacheUpdatePolicy};
 use encoded;
 use engines::epoch::{Transition as EpochTransition, PendingTransition as PendingEpochTransition};
 use engines::ForkChoice;
+use error::Error as EthcoreError;
 use ethereum_types::{H256, Bloom, BloomRef, U256};
 use header::*;
 use heapsize::HeapSizeOf;
@@ -60,6 +61,14 @@ pub trait BlockChainDB: Send + Sync {
 
 	/// Trace blooms database.
 	fn trace_blooms(&self) -> &blooms_db::Database;
+
+	/// Restore the DB from the given path
+	fn restore(&mut self, new_db: &str) -> Result<(), EthcoreError> {
+		self.key_value().restore(new_db)?;
+		self.blooms().reopen()?;
+		self.trace_blooms().reopen()?;
+		Ok(())
+	}
 }
 
 /// Generic database handler. This trait contains one function `open`. When called, it opens database with a
