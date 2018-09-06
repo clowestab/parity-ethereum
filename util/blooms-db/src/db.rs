@@ -71,6 +71,15 @@ impl Database {
 		Ok(database)
 	}
 
+	/// Close the inner-files
+	pub fn close(&mut self) -> io::Result<()> {
+		let path = ::std::env::temp_dir();
+		self.top = File::open(path.join("top.bdb"))?;
+		self.mid = File::open(path.join("mid.bdb"))?;
+		self.bot = File::open(path.join("bot.bdb"))?;
+		Ok(())
+	}
+
 	/// Reopens the database at the same location.
 	pub fn reopen(&mut self) -> io::Result<()> {
 		self.top = File::open(self.path.join("top.bdb"))?;

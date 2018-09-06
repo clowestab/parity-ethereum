@@ -19,12 +19,11 @@ extern crate migration_rocksdb;
 
 use std::{io, fs};
 use std::sync::Arc;
-use std::path::{Path, PathBuf};
+use std::path::Path;
 use blooms_db;
 use ethcore::{BlockChainDBHandler, BlockChainDB};
 use ethcore::client::{ClientConfig, DatabaseCompactionProfile};
 use ethcore::db::NUM_COLUMNS;
-use ethcore::error::Error as EthcoreError;
 use kvdb::KeyValueDB;
 use self::kvdb_rocksdb::{Database, DatabaseConfig};
 
@@ -40,8 +39,6 @@ struct AppDB {
 	key_value: Arc<KeyValueDB>,
 	blooms: Option<blooms_db::Database>,
 	trace_blooms: Option<blooms_db::Database>,
-	/// Client path
-	client_path: PathBuf,
 }
 
 impl BlockChainDB for AppDB {
@@ -55,21 +52,6 @@ impl BlockChainDB for AppDB {
 
 	fn trace_blooms(&self) -> &blooms_db::Database {
 		self.trace_blooms.as_ref().unwrap()
-	}
-
-	fn restore(&mut self, new_db: &str) -> Result<(), EthcoreError> {
-		self.blooms = None;
-		self.trace_blooms = None;
-
-		self.key_value.restore(new_db)?;
-
-		let blooms_path = self.client_path.join("blooms");
-		let trace_blooms_path = self.client_path.join("trace_blooms");
-
-		self.blooms = Some(blooms_db::Database::open(blooms_path)?);
-		self.trace_blooms = Some(blooms_db::Database::open(trace_blooms_path)?);
-
-		Ok(())
 	}
 }
 
@@ -128,7 +110,6 @@ pub fn open_database(client_path: &str, config: &DatabaseConfig) -> io::Result<A
 		key_value: Arc::new(Database::open(&config, client_path)?),
 		blooms: Some(blooms_db::Database::open(blooms_path)?),
 		trace_blooms: Some(blooms_db::Database::open(trace_blooms_path)?),
-		client_path: path.to_path_buf(),
 	};
 
 	Ok(Arc::new(db))

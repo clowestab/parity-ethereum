@@ -63,7 +63,9 @@ pub trait BlockChainDB: Send + Sync {
 	fn trace_blooms(&self) -> &blooms_db::Database;
 
 	/// Restore the DB from the given path
-	fn restore(&mut self, new_db: &str) -> Result<(), EthcoreError> {
+	fn restore(&self, new_db: &str) -> Result<(), EthcoreError> {
+		self.blooms().close()?;
+		self.trace_blooms().close()?;
 		self.key_value().restore(new_db)?;
 		self.blooms().reopen()?;
 		self.trace_blooms().reopen()?;
