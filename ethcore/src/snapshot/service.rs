@@ -189,6 +189,9 @@ impl Restoration {
 			writer.finish(self.manifest)?;
 		}
 
+		// Close the DB
+		drop(self.db);
+
 		self.guard.disarm();
 		Ok(())
 	}
