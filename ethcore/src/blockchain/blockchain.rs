@@ -64,8 +64,11 @@ pub trait BlockChainDB: Send + Sync {
 
 	/// Restore the DB from the given path
 	fn restore(&self, new_db: &str) -> Result<(), EthcoreError> {
-		self.blooms().close()?;
-		self.trace_blooms().close()?;
+		if ::std::env::var("FIX").is_ok() {
+			self.blooms().close()?;
+			self.trace_blooms().close()?;
+		}
+
 		self.key_value().restore(new_db)?;
 		self.blooms().reopen()?;
 		self.trace_blooms().reopen()?;
