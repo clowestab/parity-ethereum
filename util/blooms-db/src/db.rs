@@ -14,12 +14,16 @@
 // You should have received a copy of the GNU General Public License
 // along with Parity.  If not, see <http://www.gnu.org/licenses/>.
 
-use std::{io, fmt};
+use std::{error, io, fmt};
 use std::path::{Path, PathBuf};
 
 use ethbloom;
 
 use file::{File, FileIterator};
+
+fn other_io_err<E>(e: E) -> io::Error where E: Into<Box<error::Error + Send + Sync>> {
+	io::Error::new(io::ErrorKind::Other, e)
+}
 
 /// Bloom positions in database files.
 #[derive(Debug)]
@@ -130,44 +134,46 @@ impl Database {
 	/// Insert consecutive blooms into database starting with positon from.
 	pub fn insert_blooms<'a, I, B>(&mut self, from: u64, blooms: I) -> io::Result<()>
 	where ethbloom::BloomRef<'a>: From<B>, I: Iterator<Item = B> {
-		if let Some(ref mut db_files) = self.db_files {
-			for (index, bloom) in (from..).into_iter().zip(blooms.map(Into::into)) {
-				let pos = Positions::from_index(index);
+		match self.db_files {
+			Some(ref mut db_files) => {
+				for (index, bloom) in (from..).into_iter().zip(blooms.map(Into::into)) {
+					let pos = Positions::from_index(index);
 
-				// constant forks make lead to increased ration of false positives in bloom filters
-				// since we do not rebuild top or mid level, but we should not be worried about that
-				// most of the time events at block n(a) occur also on block n(b) or n+1(b)
-				db_files.accrue_bloom(pos, bloom)?;
-			}
-			db_files.flush()?;
-			Ok(())
-		} else {
-			panic!("ERROR: Blooms database closed!");
+					// constant forks make lead to increased ration of false positives in bloom filters
+					// since we do not rebuild top or mid level, but we should not be worried about that
+					// most of the time events at block n(a) occur also on block n(b) or n+1(b)
+					db_files.accrue_bloom(pos, bloom)?;
+				}
+				db_files.flush()?;
+				Ok(())
+			},
+			None => Err(other_io_err("Database is closed")),
 		}
 	}
 
 	/// Returns an iterator yielding all indexes containing given bloom.
 	pub fn iterate_matching<'a, 'b, B, I, II>(&'a mut self, from: u64, to: u64, blooms: II) -> io::Result<DatabaseIterator<'a, II>>
 	where ethbloom::BloomRef<'b>: From<B>, 'b: 'a, II: IntoIterator<Item = B, IntoIter = I> + Copy, I: Iterator<Item = B> {
-		if let Some(ref mut db_files) = self.db_files {
-			let index = from / 256 * 256;
-			let pos = Positions::from_index(index);
-			let files_iter = db_files.iterator_from(pos)?;
+		match self.db_files {
+			Some(ref mut db_files) => {
+				let index = from / 256 * 256;
+				let pos = Positions::from_index(index);
+				let files_iter = db_files.iterator_from(pos)?;
 
-			let iter = DatabaseIterator {
-				top: files_iter.top,
-				mid: files_iter.mid,
-				bot: files_iter.bot,
-				state: IteratorState::Top,
-				from,
-				to,
-				index,
-				blooms,
-			};
+				let iter = DatabaseIterator {
+					top: files_iter.top,
+					mid: files_iter.mid,
+					bot: files_iter.bot,
+					state: IteratorState::Top,
+					from,
+					to,
+					index,
+					blooms,
+				};
 
-			Ok(iter)
-		} else {
-			panic!("ERROR: Blooms database closed!");
+				Ok(iter)
+			},
+			None => Err(other_io_err("Database is closed")),
 		}
 	}
 }
@@ -338,5 +344,20 @@ mod tests {
 
 		let matches = database.iterate_matching(256, 257, Some(&Bloom::from(0x10))).unwrap().collect::<Result<Vec<_>, _>>().unwrap();
 		assert_eq!(matches, vec![256, 257]);
+	}
+
+	#[test]
+	fn test_db_close() {
+		let tempdir = TempDir::new("").unwrap();
+		let blooms = vec![Bloom::from(0x100), Bloom::from(0x01), Bloom::from(0x10), Bloom::from(0x11)];
+		let mut database = Database::open(tempdir.path()).unwrap();
+
+		// Close the DB and ensure inserting blooms errors
+		database.close().unwrap();
+		assert!(database.insert_blooms(254, blooms.iter()).is_err());
+
+		// Reopen it and ensure inserting blooms is OK
+		database.reopen().unwrap();
+		assert!(database.insert_blooms(254, blooms.iter()).is_ok());
 	}
 }
